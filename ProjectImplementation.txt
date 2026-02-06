@@ -1,0 +1,10 @@
+This file describes the step that I have taken
+
+Comments starting with Trivia - are for my understanding and a quick note about functionality usage.
+
+Project setup
+1. Created a project from https://start.spring.io/
+2. Imported project and resolved the errors of libraries.
+3. Followed the maven life cycle - clean, compile, install to install dependency.
+4. In pom.xml added starter dependency - <artifactId>spring-boot-starter-web</artifactId>
+5.

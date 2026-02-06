@@ -1,0 +1,80 @@
+1. @SpringBootApplication is a meta annotation that enables the auto configuration, component scanning, java based configuration, allowing Spring Boot applications to start with minimal setup.
+It combines three important annotations into one: @Configuration, @EnableAutoConfiguration, @ComponentScan.
+ComponentScan - Automatically scans for bean.
+Configuration - @Configuration tells Spring: this class knows how to create objects (beans); trust it and manage them for me.The MOST IMPORTANT, the @Configuration
+It makes beans SINGLETON-safe. Spring creates only ONE object, even if you call it many times.
+EnableAutoConfiguration - used when you want to full manual control, you define your own @Configuration & You explicitly control component scanning
+public static void main(String[] args) {
+Application start point
+Spring Boot creates an ApplicationContext.
+@SpringBootApplication → includes @EnableAutoConfiguration.
+This tells Spring Boot:
+Go and apply all possible auto-configuration classes.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+2. IN pom.xml - added starter dependency, the purpose of starter dependency is by adding this dependency in xml, you will get list of dependencies readily available
+to use in your applications, you can focus more on business logic and use these feature in your project.
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+This automatically includes:
+Spring MVC
+Embedded Tomcat
+Jackson (JSON)
+Validation
+Logging
+
+-Starters do not contain code.
+-They only contain dependencies
+-Auto-configuration uses those dependencies to configure beans
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+3. Added debug = true in application.properties
+To check Which auto-configuration classes were applied
+Which were skipped
+Why they were skipped (conditions)
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+4. Embedded Tomcat -
+spring-boot-starter-web brings Tomcat as a dependency, and Spring Boot auto-configures and starts it as an embedded server.
+Spring Boot creates:
+
+The TomcatServletWebServerFactory factory : Knows how to start Tomcat, Sets port, context path, threads, etc.
+Application starts the server When this line runs:
+SpringApplication.run(MyApp.class, args);
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+5. Called /Health API
+    This is a controller, this does not have responsibility to deal with database. Law of demeter principle,
+    controller should only talk to service, service should be responsible for talking to db.
+    Service contains business logic.
+		Dividing application into 3 layer
+		Controller
+		Service
+		Repository
+
+Other than above Entities.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+6. application.properties and application.yml
+
+Spring Boot supports both application.yml and application.properties. If both are present, no error occurs, but properties defined in application.properties take precedence over application.yml.
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+7.  Embedded tomcat -
+
+spring-boot-starter-web -->
+⮕ pulls spring-boot-starter-tomcat
+⮕ which contains embedded Tomcat jars
+
+Tomcat is just another Java object created by Spring Boot.
+
+Where I can check in console ?
+search with text in console - Tomcat initialized with port
+main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 8081 (http)
+2026-01-31T15:17:33.298+05:30  INFO 1320 --- [OrderManagementSystem] [main] o.apache.catalina.core.StandardService  : Starting service [Tomcat]
+2026-01-31T15:17:33.298+05:30  INFO 1320 --- [OrderManagementSystem] [ main] o.apache.catalina.core.StandardEngine  : Starting Servlet engine: [Apache Tomcat/11.0.15]
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+Mistake 1: JPA starter added but NO DB dependency
+I added spring-boot-starter-data-jpa in xml but no db was mentioned, so application gives error to start.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
