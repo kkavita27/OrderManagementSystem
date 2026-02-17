@@ -11,8 +11,8 @@ Spring Boot creates an ApplicationContext.
 This tells Spring Boot:
 Go and apply all possible auto-configuration classes.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
-2. IN pom.xml - added starter dependency, the purpose of starter dependency is by adding this dependency in xml, you will get list of dependencies readily available
-to use in your applications, you can focus more on business logic and use these feature in your project.
+2. IN pom.xml - added starter dependency, the purpose of starter dependency is by adding this dependency in xml, you will get list of dependencies
+readily available to use in your applications, you can focus more on business logic and use these feature in your project.
 <dependency>
   <groupId>org.springframework.boot</groupId>
   <artifactId>spring-boot-starter-web</artifactId>
@@ -30,7 +30,7 @@ Logging
 -Auto-configuration uses those dependencies to configure beans
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 3. Added debug = true in application.properties
-To check Which auto-configuration classes were applied
+To check Which auto-configuration classes were applied.
 Which were skipped
 Why they were skipped (conditions)
 
@@ -78,3 +78,24 @@ main] o.s.boot.tomcat.TomcatWebServer          : Tomcat initialized with port 80
 Mistake 1: JPA starter added but NO DB dependency
 I added spring-boot-starter-data-jpa in xml but no db was mentioned, so application gives error to start.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
+DTO (data Transfer Object)  vs Entity separation.
+Golden Rule:
+Controller talks DTO (DTO → a courier packet that carries only what’s needed.)
+Repository talks Entity (Entity → your actual database table.)
+Service translates between them.
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+CURL Commands used to get and post data:
+curl -X POST http://localhost:8082/orders -H "Content-Type: application/json" --data-raw "{\"orderName\":\"Jeans\",\"orderDate\":\"16/02/2026\",\"orderStatus\":\"Open\"}"
+
+curl -X GET http://localhost:8082/orders
+
+Via curl command, one can connect to server.
+
+URLs that I hit in browser to see data:
+1. http://localhost:8082
+2. http://localhost:8082/health
+3. http://localhost:8082/orders
+4. http://localhost:8082/orders/orderId=5 - to check error handling
+5. http://localhost:8082/orders?orderId=1 - to see actual data by Id
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------
+
