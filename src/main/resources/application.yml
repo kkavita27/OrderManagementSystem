@@ -9,7 +9,10 @@ server:
 spring:
      main:
         banner-mode: off
-
+     app:
+       app.version: 1.0
+       app.name: OrderService
+       app.environment: qa
      h2:
         console:
           enabled: true

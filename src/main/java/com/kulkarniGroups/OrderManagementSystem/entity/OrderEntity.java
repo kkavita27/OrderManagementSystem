@@ -1,4 +1,4 @@
-package com.kulkarniGroups.OrderManagementSystem.Entity;
+package com.kulkarniGroups.OrderManagementSystem.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -7,10 +7,9 @@ import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Date;
 
 @Entity
-public class Orders {
+public class OrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -25,26 +24,34 @@ public class Orders {
     @NotNull(message = "Order status can not be null")
     private String orderStatus;
 
+    @NotNull
+    private Double orderPrice;
+
+    @NotNull
+    private int orderQty;
+
     @OneToOne
     @JsonIgnore
-    public List<Orders> orders;
+    public List<OrderEntity> orders;
 
-    public List<Orders> getOrders()
+    public List<OrderEntity> getOrders()
     {
         return  orders;
     }
 
-    public Orders()
+    public OrderEntity()
     {
 
     }
 
-    public Orders(Long orderId, String orderName, LocalDate orderDate, String orderStatus, List<Orders> orders)
+    public OrderEntity(Long orderId, String orderName, LocalDate orderDate, String orderStatus, int orderQty, Double orderPrice, List<OrderEntity> orders)
     {
         this.orderId = orderId;
         this.orderName = orderName;
         this.orderDate = orderDate;
         this.orderStatus = orderStatus;
+        this.orderPrice = orderPrice;
+        this.orderQty = orderQty;
         this.orders = orders;
     }
 
@@ -72,7 +79,7 @@ public class Orders {
         this.orderStatus = orderStatus;
     }
 
-    public void setOrders(List<Orders> orders) {
+    public void setOrders(List<OrderEntity> orders) {
         this.orders = orders;
     }
 
@@ -82,5 +89,21 @@ public class Orders {
 
     public void setOrderName(String orderName) {
         this.orderName = orderName;
+    }
+
+    public Double getOrderPrice() {
+        return orderPrice;
+    }
+
+    public void setOrderPrice(Double orderPrice) {
+        this.orderPrice = orderPrice;
+    }
+
+    public int getOrderQty() {
+        return orderQty;
+    }
+
+    public void setOrderQty(int orderQty) {
+        this.orderQty = orderQty;
     }
 }

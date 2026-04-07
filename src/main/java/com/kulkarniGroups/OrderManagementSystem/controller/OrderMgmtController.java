@@ -1,10 +1,9 @@
-package com.kulkarniGroups.OrderManagementSystem.Controller;
+package com.kulkarniGroups.OrderManagementSystem.controller;
 
-import com.kulkarniGroups.OrderManagementSystem.Entity.Orders;
-import com.kulkarniGroups.OrderManagementSystem.Exceptions.OrderIdNotFoundException;
-import com.kulkarniGroups.OrderManagementSystem.Service.OrderManagementService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
+import com.kulkarniGroups.OrderManagementSystem.POJO.OrderPOJO;
+import com.kulkarniGroups.OrderManagementSystem.entity.OrderEntity;
+import com.kulkarniGroups.OrderManagementSystem.exceptions.OrderIdNotFoundException;
+import com.kulkarniGroups.OrderManagementSystem.service.OrderManagementService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,27 +14,25 @@ import java.util.List;
 @RestController
 public class OrderMgmtController {
 
-    @Autowired
-    OrderManagementService orderManagementService;
-    //Controller talks to service layer.
+//    @Autowired
+//    OrderManagementService orderManagementService;
+//    //Controller talks to service layer.
 
 
-    @GetMapping("/")
-    public String HelloWorld()
-    {  //Simple end point
-        return "Hello Kavita!";
+    private final OrderManagementService orderManagementService;
+
+
+    //Why parameterised constructor is introduced here.
+    public OrderMgmtController(OrderManagementService orderManagementService) {
+        this.orderManagementService = orderManagementService;
     }
 
-    @GetMapping("/health")
-    public String Health()
-    {
-        return "this is health api ";
-    }
+
 
     @PostMapping("/orders")
-    public Orders createOrder(@Valid @RequestBody Orders orders)
+    public OrderPOJO createOrder(@Valid @RequestBody OrderPOJO orderPOJO)
     {
-        return  orderManagementService.createOrder(orders);
+        return  orderManagementService.createOrder(orderPOJO);
     }
 
 
@@ -80,22 +77,25 @@ public class OrderMgmtController {
 
 
     @GetMapping("/orders")
-    public List<Orders> getOrders(
+    public List<OrderPOJO> getOrders(
          @RequestParam(value = "orderId", required = false) Long orderId,
-         @RequestParam(value = "orderName", required = false) String orderName) throws OrderIdNotFoundException {
+         @RequestParam(value = "orderName", required = false) String orderName) throws OrderIdNotFoundException
+    {
 
-        List<Orders> orders = orderManagementService.getAllOrders();
+
+
+        List<OrderPOJO> orders = orderManagementService.getAllOrders();
         if(orders.isEmpty())
         {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).body(orders).getBody();
         }  if (orderId == null && (orderName == null || orderName.isEmpty())) {
                 return  orderManagementService.getAllOrders();
         }  if(orderId != null) {
-            Orders orders1 = orderManagementService.findByOrderId(orderId);
+            OrderPOJO orders1 = orderManagementService.findByOrderId(orderId);
             return List.of(orders1);
         }
         {
-            Orders order = orderManagementService.findByOrderName(orderName);
+            OrderPOJO order = orderManagementService.findByOrderName(orderName);
             return List.of(order);
         }
     }

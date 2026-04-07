@@ -1,4 +1,4 @@
-package com.kulkarniGroups.OrderManagementSystem.Exceptions;
+package com.kulkarniGroups.OrderManagementSystem.exceptions;
 
 public class OrderIdNotFoundException extends Exception {
 

@@ -7,4 +7,4 @@ Project setup
 2. Imported project and resolved the errors of libraries.
 3. Followed the maven life cycle - clean, compile, install to install dependency.
 4. In pom.xml added starter dependency - <artifactId>spring-boot-starter-web</artifactId>
-5.
+5. For
