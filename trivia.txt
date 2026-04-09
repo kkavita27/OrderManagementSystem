@@ -85,16 +85,15 @@ Repository talks Entity (Entity → your actual database table.)
 Service translates between them.
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 CURL Commands used to get and post data:
-curl -X POST http://localhost:8082/orderEntity -H "Content-Type: application/json" --data-raw "{\"orderName\":\"Jeans\",\"orderDate\":\"16/02/2026\",\"orderStatus\":\"Open\"}"
-
-curl -X GET http://localhost:8082/orderEntity
+curl -X POST http://localhost:8082/orders -H "Content-Type: application/json" -d "{\"orderName\":\"Jeans\",\"orderDate\":\"2026-02-16\",\"orderStatus\":\"Open\",\"orderPrice\":999.99,\"orderQty\":2}"
+curl -X GET http://localhost:8082/orders
 
 Via curl command, one can connect to server.
 
 URLs that I hit in browser to see data:
 1. http://localhost:8082
 2. http://localhost:8082/health
-3. http://localhost:8082/orderEntity
+3. http://localhost:8082/orders
 4. http://localhost:8082/orderEntity/orderId=5 - to check error handling
 5. http://localhost:8082/orderEntity?orderId=1 - to see actual data by Id
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------

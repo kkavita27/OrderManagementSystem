@@ -42,6 +42,11 @@ public class OrderManagementService
         //Converted the OrderPOJO object into the entity. This POJO is taken from controller class and passed to Service layer.
         OrderEntity orderEntity = new OrderEntity();
         orderEntity.setOrderId(order.getOrderId());
+        orderEntity.setOrderName(order.getOrderName());
+        orderEntity.setOrderDate(order.getOrderDate());
+        orderEntity.setOrderQty(order.getOrderQty());
+        orderEntity.setOrderPrice(order.getOrderPrice());
+        orderEntity.setOrderStatus(order.getOrderStatus());
         orderRepository.save(orderEntity); // // returns OrderEntity, Entity is saved to DB via repository
         order.setOrderId(orderEntity.getOrderId()); // This will return the orderID into the order object
         return order;
