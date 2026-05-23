@@ -34,6 +34,12 @@ public class OrderEntity {
     @JsonIgnore
     public List<OrderEntity> orders;
 
+    @OneToMany(mappedBy = "order",
+            cascade = CascadeType.ALL,
+            fetch = FetchType.LAZY)
+    private List<OrderItem> orderItems;
+
+    //wrong impl
     public List<OrderEntity> getOrders()
     {
         return  orders;

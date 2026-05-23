@@ -98,3 +98,44 @@ URLs that I hit in browser to see data:
 5. http://localhost:8082/orderEntity?orderId=1 - to see actual data by Id
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+Learn:
+ - @SpringBootApplication - In Spring Boot, the @SpringBootApplication annotation is a single, convenience annotation used to mark the main entry point of an application. It is typically placed on the class containing the public static void main method to bootstrap the Spring context.
+                            It is effectively a "3-in-1" meta-annotation that combines three core Spring functionalities into one:
+                            Core Components
+                            The @SpringBootApplication annotation is equivalent to using these three annotations with their default attributes:
+                            @SpringBootConfiguration: A specialized version of Spring's standard @Configuration. It marks the class as a source of bean definitions, allowing you to define additional beans directly within your main class using the @Bean annotation.
+                            @EnableAutoConfiguration: Tells Spring Boot to "guess" and automatically configure the beans you likely need based on the jar dependencies present on your classpath. For instance, if spring-boot-starter-web is present, it automatically sets up an embedded web server like Tomcat.
+                            @ComponentScan: Instructs Spring to scan the current package and all sub-packages for other Spring-managed components such as @Component, @Service, @Repository, and @Controller.
+ - Auto-configuration  - Auto-configuration is used to dramatically simplify application setup by automatically configuring beans and settings based on the project's environment. In traditional Spring development, developers had to manually write extensive XML or Java-based configurations for every component, which was time-consuming and error-prone.
+                         Why Developers Use It
+                         Reduces Boilerplate: It eliminates the need to write repetitive setup code for common tasks like connecting to a database or starting a web server.
+                         Faster Development: You can get a project running in minutes just by adding a "Starter" dependency (like spring-boot-starter-web), as Spring Boot "guesses" what you need and sets it up automatically.
+                         Convention over Configuration: It follows "smart defaults". For example, if it sees a database driver like H2 on your classpath, it automatically configures an in-memory database bean for you.
+                         Non-Invasive Control: It is designed to "back away" as soon as you define your own configuration. If you create your own DataSource bean, Spring Boot’s auto-configured version is disabled.
+ - Starter dependencies - Spring Boot starter dependencies are curated "dependency descriptors" that bundle together all the necessary libraries and configurations for a specific feature into a single artifact. They eliminate the need to manually search for and manage dozens of individual library versions.
+ - Embedded Tomcat - spring-boot-starter-web puts the Tomcat JAR on your classpath, which Spring Boot detects and then automatically starts an embedded server.
+
+ ---------------------------------------------------------------------------------------------------------------------
+
+PHASE 2: Data Layer Mastery (Week 2)
+✅ Step 3: Spring Data JPA
+Hands-on:
+ - PostgreSQL (Docker) -
+ Created a docker image by running below command :
+ docker run --name postgres-db -e POSTGRES_DB=testdb -e POSTGRES_USER=admin -e POSTGRES_PASSWORD=admin -p 5432:5432 -d postgres
+
+ By running above command, docker did 3 things:
+ 1. Pulled the PostgreSQL image
+ From Docker Hub (if not already present)
+ 2. Created a container : A container named: postgres-db
+ 3. Started PostgreSQL + created a database :
+    Created a database → testdb
+    Created a user → admin
+    Set password → admin
+
+ Once the docker image was created, then checked the docker image by running:
+ - docker ps
+
+ In case container is stopped, run :
+ - docker start postgres-db
+

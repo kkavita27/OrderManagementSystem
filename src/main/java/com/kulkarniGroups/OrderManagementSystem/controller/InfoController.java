@@ -2,7 +2,9 @@ package com.kulkarniGroups.OrderManagementSystem.controller;
 
 import com.kulkarniGroups.OrderManagementSystem.config.AppProperties;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
+@RestController
 public class InfoController {
     private final AppProperties appProperties;
 

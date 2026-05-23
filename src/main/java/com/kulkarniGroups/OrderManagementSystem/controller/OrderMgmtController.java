@@ -1,17 +1,23 @@
 package com.kulkarniGroups.OrderManagementSystem.controller;
 
 import com.kulkarniGroups.OrderManagementSystem.POJO.OrderPOJO;
-import com.kulkarniGroups.OrderManagementSystem.entity.OrderEntity;
 import com.kulkarniGroups.OrderManagementSystem.exceptions.OrderIdNotFoundException;
 import com.kulkarniGroups.OrderManagementSystem.service.OrderManagementService;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
 import java.util.List;
+import java.util.Objects;
 
-@RestController
+@Controller
 public class OrderMgmtController {
 
 //    @Autowired
@@ -30,21 +36,11 @@ public class OrderMgmtController {
 
 
     @PostMapping("/orders")
-    public OrderPOJO createOrder(@Valid @RequestBody OrderPOJO orderPOJO)
+    public OrderPOJO createOrder(@Valid @RequestBody OrderPOJO orderPOJO, Model model)
     {
+        model.addAttribute("orders",orderPOJO);
         return  orderManagementService.createOrder(orderPOJO);
     }
-
-
-//    @GetMapping("/orders")
-//    public List<Orders> getCourse(@RequestParam(value="orderId", required=false) Long orderId)
-//    {
-//        if(orderId == null) {orderManagementService.getAllOrders();
-//        }
-//
-//        Orders orders = orderManagementService.findByOrderId(orderId);
-//        return List.of(orders);
-//    }
 
 
     /*
@@ -77,30 +73,66 @@ public class OrderMgmtController {
 
 
     @GetMapping("/orders")
-    public List<OrderPOJO> getOrders(
-         @RequestParam(value = "orderId", required = false) Long orderId,
-         @RequestParam(value = "orderName", required = false) String orderName) throws OrderIdNotFoundException
+//    public List<OrderPOJO> getOrders(
+//    Converted the above impl to
+    public String getOrders(@PageableDefault( page = 0,size = 10,sort = "orderDate",direction = Sort.Direction.DESC)
+            Pageable pageable,
+            @RequestParam(value = "orderId", required = false)
+            Long orderId,
+            @RequestParam(value = "orderName", required = false)
+            String orderName,
+            Model model
+    ) throws OrderIdNotFoundException
     {
+        List<OrderPOJO> orders;
 
 
+        if (orderId != null) {
+            OrderPOJO order = orderManagementService.findByOrderId(orderId);
+            orders = List.of(order);
 
-        List<OrderPOJO> orders = orderManagementService.getAllOrders();
-        if(orders.isEmpty())
-        {
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).body(orders).getBody();
-        }  if (orderId == null && (orderName == null || orderName.isEmpty())) {
-                return  orderManagementService.getAllOrders();
-        }  if(orderId != null) {
-            OrderPOJO orders1 = orderManagementService.findByOrderId(orderId);
-            return List.of(orders1);
         }
-        {
+        else  if (orderName != null && !orderName.isEmpty()) {
             OrderPOJO order = orderManagementService.findByOrderName(orderName);
-            return List.of(order);
+//            return List.of(order);
+            orders = List.of(order); // OrderPOJO object from line 102 is passed to list of OrderPOJO
         }
+        else {
+
+            orders =
+                    orderManagementService.getAllOrders(pageable);
+        }
+//        List<OrderPOJO> orders = orderManagementService.getAllOrders(pageable);
+        /*
+        The controller is only:
+        receiving Pageable
+        passing it to service
+
+         The real pagination still happens when repository executes query using pageable
+         */
+        if (orders.isEmpty()) {
+            return Objects.requireNonNull(ResponseEntity
+                    .status(HttpStatus.NO_CONTENT)
+                    .body(orders)
+                    .getBody()).toString();
+        }
+
+        model.addAttribute("orders", orders);
+
+        model.addAttribute("order", new OrderPOJO());
+
+        //return orders; //Earlier OrderPOJO object.
+        return "orders";
     }
 
+    @DeleteMapping("orders/{orderId}")
+    public OrderPOJO deleteOrder(@PathVariable Long orderId, Model model)
+    {
+        // Add attribute to the model
+        model.addAttribute("message", "User deleted successfully");
+        return orderManagementService.deleteOrder(orderId);
 
+    }
 
 
 }

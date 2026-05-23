@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Orders</title>
+</head>
+<body>
+
+<h1>Orders</h1>
+
+<table border="1">
+
+    <tr>
+        <th>Order Id</th>
+        <th>Order Name</th>
+        <th>Order Date</th>
+    </tr>
+
+    <tr th:each="order : ${orders}">
+        <td th:text="${order.orderId}"></td>
+        <td th:text="${order.orderName}"></td>
+        <td th:text="${order.orderDate}"></td>
+    </tr>
+
+</table>
+
+<div class="container">
+
+    <form action="#" th:action="@{/save}" th:object="${orders}"
+          method="POST">
+
+        <!-- Add hidden form field to handle update -->
+        <input type="hidden" th:field="*{orderId}" />
+
+        <input type="text" th:field="*{orderName}" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{orderDate}" class="form-control mb-4 col-4">
+
+        <input type="text" th:field="*{orderQty}" class="form-control mb-4 col-4">
+
+        <button type="submit" class="btn btn-info col-2"> Update Order</button>
+    </form>
+
+    <hr>
+
+    <a th:href = "@{/}"> Back to Order List</a>
+</div>
+
+</body>
+</html>

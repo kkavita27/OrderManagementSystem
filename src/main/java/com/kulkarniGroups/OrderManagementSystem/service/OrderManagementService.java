@@ -6,7 +6,8 @@ import com.kulkarniGroups.OrderManagementSystem.exceptions.OrderIdNotFoundExcept
 import com.kulkarniGroups.OrderManagementSystem.exceptions.OrderNameNotFoundException;
 import com.kulkarniGroups.OrderManagementSystem.repository.OrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.annotation.Order;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -52,11 +53,13 @@ public class OrderManagementService
         return order;
     }
 
-
-           public List<OrderPOJO> getAllOrders()
+    public List<OrderPOJO> getAllOrders(Pageable pageable)
         {
             // 1. Fetch all entities from DB; DB → Entity → convert → POJO → return
-            List<OrderEntity> entities = orderRepository.findAll();
+//            Earlier implementation without Pageable.
+//            List<OrderEntity> entities = orderRepository.findAll();
+//            After implementing pagable
+            Page<OrderEntity> entities = orderRepository.findAll(pageable);
 
             // 2. Create a list for POJO response
             List<OrderPOJO> pojoList = new ArrayList<>();
@@ -109,6 +112,21 @@ public class OrderManagementService
         OrderPOJO pojo = new OrderPOJO();
         pojo.setOrderId(entity.getOrderId());
 
+
+        return pojo;
+    }
+
+    public OrderPOJO deleteOrder(Long orderId)
+    {
+
+        OrderEntity orderEntity = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Order not found"));
+        orderRepository.delete(orderEntity);
+        OrderPOJO pojo = new OrderPOJO();
+        pojo.setOrderId(orderEntity.getOrderId());
+        pojo.setOrderName(orderEntity.getOrderName());
+        pojo.setOrderDate(orderEntity.getOrderDate());
+        pojo.setOrderStatus(orderEntity.getOrderStatus());
+        pojo.setOrderPrice(orderEntity.getOrderPrice());
 
         return pojo;
     }
