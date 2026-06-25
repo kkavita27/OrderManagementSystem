@@ -35,11 +35,37 @@ public class OrderMgmtController {
 
 
 
-    @PostMapping("/orders")
-    public OrderPOJO createOrder(@Valid @RequestBody OrderPOJO orderPOJO, Model model)
+//    @PostMapping("/orders")
+//    public OrderPOJO createOrder(@Valid @RequestBody OrderPOJO orderPOJO, Model model)
+//    {
+//        model.addAttribute("orders",orderPOJO);
+//        return  orderManagementService.createOrder(orderPOJO);
+//    }
+// why post mapping /orders changed to save
+//After save:
+//
+//    return "redirect:/orders";
+//
+//    tells browser:
+//
+//    Go back to GET /orders
+//
+//    which reloads updated table.
+//
+//    This is standard MVC flow:
+//
+//    GET page
+//→ submit form
+//→ POST save
+//→ redirect GET page
+    @PostMapping("/save")
+    public String createOrder(
+            @Valid @ModelAttribute("order") OrderPOJO orderPOJO,
+            Model model)
     {
-        model.addAttribute("orders",orderPOJO);
-        return  orderManagementService.createOrder(orderPOJO);
+        orderManagementService.createOrder(orderPOJO);
+
+        return "redirect:/orders";
     }
 
 
@@ -86,7 +112,7 @@ public class OrderMgmtController {
     {
         List<OrderPOJO> orders;
 
-
+        //http://localhost:8082/orders?orderId=1
         if (orderId != null) {
             OrderPOJO order = orderManagementService.findByOrderId(orderId);
             orders = List.of(order);
@@ -110,12 +136,14 @@ public class OrderMgmtController {
 
          The real pagination still happens when repository executes query using pageable
          */
-        if (orders.isEmpty()) {
-            return Objects.requireNonNull(ResponseEntity
-                    .status(HttpStatus.NO_CONTENT)
-                    .body(orders)
-                    .getBody()).toString();
-        }
+//        if (orders.isEmpty()) {
+//            return Objects.requireNonNull(ResponseEntity
+//                    .status(HttpStatus.NO_CONTENT)
+//                    .body(orders)
+//                    .getBody()).toString();
+//        }
+//        what is the reason behind removing order.isEmpty block ?
+//        Because in a Thymeleaf MVC flow, the controller method must return a view name, not response data.
 
         model.addAttribute("orders", orders);
 
@@ -125,14 +153,14 @@ public class OrderMgmtController {
         return "orders";
     }
 
-    @DeleteMapping("orders/{orderId}")
-    public OrderPOJO deleteOrder(@PathVariable Long orderId, Model model)
-    {
-        // Add attribute to the model
-        model.addAttribute("message", "User deleted successfully");
-        return orderManagementService.deleteOrder(orderId);
+        @DeleteMapping("orders/{orderId}")
+        public OrderPOJO deleteOrder(@PathVariable Long orderId, Model model)
+        {
+            // Add attribute to the model
+            model.addAttribute("message", "User deleted successfully");
+            return orderManagementService.deleteOrder(orderId);
 
-    }
+        }
 
 
 }

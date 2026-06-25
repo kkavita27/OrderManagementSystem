@@ -6,6 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -30,27 +31,36 @@ public class OrderEntity {
     @NotNull
     private int orderQty;
 
-    @OneToOne
-    @JsonIgnore
-    public List<OrderEntity> orders;
+//    @OneToOne
+//    @JsonIgnore
+//    public List<OrderEntity> orders;
 
-    @OneToMany(mappedBy = "order",
+    @OneToMany(
+            mappedBy = "order",
             cascade = CascadeType.ALL,
-            fetch = FetchType.LAZY)
-    private List<OrderItem> orderItems;
+            orphanRemoval = true
+    )
+    private List<OrderItem> orderItems = new ArrayList<>();
+
 
     //wrong impl
-    public List<OrderEntity> getOrders()
-    {
-        return  orders;
-    }
+//    public List<OrderEntity> getOrders()
+//    {
+//        return  orders;
+//    }
 
     public OrderEntity()
     {
 
     }
 
-    public OrderEntity(Long orderId, String orderName, LocalDate orderDate, String orderStatus, int orderQty, Double orderPrice, List<OrderEntity> orders)
+    public OrderEntity(
+            Long orderId,
+            String orderName,
+            LocalDate orderDate,
+            String orderStatus,
+            int orderQty,
+            Double orderPrice)
     {
         this.orderId = orderId;
         this.orderName = orderName;
@@ -58,7 +68,6 @@ public class OrderEntity {
         this.orderStatus = orderStatus;
         this.orderPrice = orderPrice;
         this.orderQty = orderQty;
-        this.orders = orders;
     }
 
     public Long getOrderId() {
@@ -85,9 +94,9 @@ public class OrderEntity {
         this.orderStatus = orderStatus;
     }
 
-    public void setOrders(List<OrderEntity> orders) {
-        this.orders = orders;
-    }
+//    public void setOrders(List<OrderEntity> orders) {
+//        this.orders = orders;
+//    }
 
     public String getOrderName() {
         return orderName;
@@ -111,5 +120,21 @@ public class OrderEntity {
 
     public void setOrderQty(int orderQty) {
         this.orderQty = orderQty;
+    }
+
+    public List<OrderItem> getOrderItems()
+    {
+        return orderItems;
+    }
+
+    public void setOrderItems(List<OrderItem> orderItems)
+    {
+        this.orderItems = orderItems;
+    }
+
+    public void addItem(OrderItem item)
+    {
+        orderItems.add(item);
+        item.setOrder(this);
     }
 }

@@ -26,5 +26,13 @@ public class OrderItem {
     public OrderItem() {
     }
 
+    public OrderEntity getOrder() {
+        return order;
+    }
+
+    public void setOrder(OrderEntity order) {
+        this.order = order;
+    }
+
     // getters and setters
 }

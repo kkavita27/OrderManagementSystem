@@ -13,58 +13,26 @@ import java.util.List;
 //    This POJO layer will talk to Controller layer.
 
     private Long orderId;
+
     private String orderName;
+
     private LocalDate orderDate;
+
     private Double orderPrice;
+
     private int orderQty;
+
     private String orderStatus;
 
-    public List<OrderEntity> orders;
+    private List<OrderItemPOJO> orderItems;
 
-    public OrderPOJO() {}
-    public List<OrderEntity> getOrders()
-    {
-        return  orders;
-    }
-
-    public void OrderEntity(Long orderId, String orderName, LocalDate orderDate, String orderStatus, int orderQty, Double orderPrice, List<OrderEntity> orders)
-    {
-        this.orderId = orderId;
-        this.orderName = orderName;
-        this.orderDate = orderDate;
-        this.orderStatus = orderStatus;
-        this.orderPrice = orderPrice;
-        this.orderQty = orderQty;
-        this.orders = orders;
-    }
-
+    // getters and setters
     public Long getOrderId() {
-
         return orderId;
     }
 
     public void setOrderId(Long orderId) {
         this.orderId = orderId;
-    }
-
-    public LocalDate getOrderDate() {
-        return orderDate;
-    }
-
-    public void setOrderDate(LocalDate orderDate) {
-        this.orderDate = orderDate;
-    }
-
-    public String getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(String orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
-    public void setOrders(List<OrderEntity> orders) {
-        this.orders = orders;
     }
 
     public String getOrderName() {
@@ -73,6 +41,14 @@ import java.util.List;
 
     public void setOrderName(String orderName) {
         this.orderName = orderName;
+    }
+
+    public LocalDate getOrderDate() {
+        return orderDate;
+    }
+
+    public void setOrderDate(LocalDate orderDate) {
+        this.orderDate = orderDate;
     }
 
     public Double getOrderPrice() {
@@ -91,4 +67,15 @@ import java.util.List;
         this.orderQty = orderQty;
     }
 
-}
+    public String getOrderStatus() {
+        return orderStatus;
+    }
+
+    public void setOrderStatus(String orderStatus) {
+        this.orderStatus = orderStatus;
+    }
+
+
+    }
+
+

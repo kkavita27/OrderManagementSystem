@@ -7,43 +7,76 @@
 
 <h1>Orders</h1>
 
-<table border="1">
+<div th:if="${#lists.isEmpty(orders)}">
+    No orders found.
+</div>
+
+<table border="1" th:if="${not #lists.isEmpty(orders)}">
 
     <tr>
         <th>Order Id</th>
         <th>Order Name</th>
         <th>Order Date</th>
+        <th>Order Status</th>
+        <th>Order Price</th>
     </tr>
 
     <tr th:each="order : ${orders}">
         <td th:text="${order.orderId}"></td>
         <td th:text="${order.orderName}"></td>
         <td th:text="${order.orderDate}"></td>
+        <td th:text="${order.orderStatus}"></td>
+        <td th:text="${order.orderPrice}"></td>
+
     </tr>
 
 </table>
 
-<div class="container">
+<form th:action="@{/save}"
+      th:object="${order}"
+      method="POST">
 
-    <form action="#" th:action="@{/save}" th:object="${orders}"
-          method="POST">
+    <input type="hidden" th:field="*{orderId}" />
 
-        <!-- Add hidden form field to handle update -->
-        <input type="hidden" th:field="*{orderId}" />
+    <div>
+        <label>Order Name</label><br>
+        <input type="text" th:field="*{orderName}">
+    </div>
 
-        <input type="text" th:field="*{orderName}" class="form-control mb-4 col-4">
+    <br>
 
-        <input type="text" th:field="*{orderDate}" class="form-control mb-4 col-4">
+    <div>
+        <label>Order Date</label><br>
+        <input type="text" th:field="*{orderDate}">
+    </div>
 
-        <input type="text" th:field="*{orderQty}" class="form-control mb-4 col-4">
+    <br>
 
-        <button type="submit" class="btn btn-info col-2"> Update Order</button>
-    </form>
+    <div>
+        <label>Order Quantity</label><br>
+        <input type="text" th:field="*{orderQty}">
+    </div>
 
-    <hr>
+    <br>
 
-    <a th:href = "@{/}"> Back to Order List</a>
-</div>
+    <div>
+        <label>Order Status</label><br>
+        <input type="text" th:field="*{orderStatus}">
+    </div>
+
+
+    <div>
+        <label>Order Price</label><br>
+        <input type="text" th:field="*{orderPrice}">
+    </div>
+
+    <br>
+
+    <button type="submit">
+        Save Order
+    </button>
+
+</form>
 
 </body>
 </html>

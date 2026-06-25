@@ -21,3 +21,12 @@ Exception processing template "[]": Error resolving template [[]], template migh
 
 org.thymeleaf.exceptions.TemplateInputException: Error resolving template [[]], template might not exist or might not be accessible by any of the configured Template Resolvers
 
+To resolve this error, commented below line.
+//        if (orders.isEmpty()) {
+//            return Objects.requireNonNull(ResponseEntity
+//                    .status(HttpStatus.NO_CONTENT)
+//                    .body(orders)
+//                    .getBody()).toString();
+//        }
+//        what is the reason behind removing order.isEmpty block ?
+//        Because in a Thymeleaf MVC flow, the controller method must return a view name, not response data.
