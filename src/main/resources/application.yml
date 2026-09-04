@@ -8,11 +8,22 @@ server:
 
 spring:
      main:
-        banner-mode: off
-     app:
-       app.version: 1.0
-       app.name: OrderService
-       app.environment: qa
+        banner-mode: on
+#     app:
+#       app.version: 1.0
+#       app.name: OrderService
+#       app.environment: qa
+#     datasource:
+#       url: jdbc:postgresql://localhost:5432/testdb
+#       username: admin
+#       password: admin
+#       driver-class-name: org.postgresql.Driver
+
+     jpa:
+        database-platform: org.hibernate.dialect.PostgreSQLDialect
+        hibernate:
+           ddl-auto: update
+        show-sql: true
 #     h2:
 #        console:
 #          enabled: true
@@ -32,15 +43,5 @@ spring:
 #       ddl-auto: update # Automatically update the database schema
 
 
-datasource:
-  url: jdbc:postgresql://localhost:5432/testdb
-  username: admin
-  password: admin
-  driver-class-name: org.postgresql.Driver
 
-  jpa:
-    database-platform: org.hibernate.dialect.PostgreSQLDialect
-    hibernate:
-      ddl-auto: update
-    show-sql: true
 

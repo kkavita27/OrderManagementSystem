@@ -7,9 +7,8 @@ import java.util.List;
 
     public class OrderPOJO
 {
-//     Created a POJO for a entity Order
-//     Difference between POJO and entity is, entity use @Entity annotation whereas OrderPOJO class is plain java pojo.
-
+//     Created a POJO for an entity Order
+//     Difference between POJO and entity is, entity use @Entity annotation whereas OrderPOJO class is plain old java object pojo.
 //    This POJO layer will talk to Controller layer.
 
     private Long orderId;

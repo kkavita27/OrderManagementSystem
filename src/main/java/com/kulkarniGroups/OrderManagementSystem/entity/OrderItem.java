@@ -23,6 +23,30 @@ public class OrderItem {
     @JsonIgnore
     private OrderEntity order;
 
+    /* LAZY vs EAGER
+    Then, if a particular service method needs the items immediately,
+    create a repository method using JOIN FETCH rather than changing the entire relationship to EAGER.
+    This gives you better performance and more control over when related data is loaded.
+     */
+    /*
+        Summary
+        Layer	        Responsibility
+        Entity	        Defines the fetch strategy (FetchType.LAZY or FetchType.EAGER)
+        Repository	    Retrieves entities and can override fetch behavior for specific queries (e.g., JOIN FETCH)
+        Service	        Uses the entities and may trigger lazy loading by accessing related fields within a transaction
+     */
+    @ManyToOne(fetch = FetchType.LAZY) // Defines the fetch strategy
+    @JoinColumn(name = "inventory_id")
+    private InventoryEntity inventory;
+
+    public InventoryEntity getInventory() {
+        return inventory;
+    }
+
+    public void setInventory(InventoryEntity inventory) {
+        this.inventory = inventory;
+    }
+
     public OrderItem() {
     }
 

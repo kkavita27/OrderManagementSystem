@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Objects;
 
 @Controller
+
 public class OrderMgmtController {
 
 //    @Autowired
@@ -63,9 +64,12 @@ public class OrderMgmtController {
             @Valid @ModelAttribute("order") OrderPOJO orderPOJO,
             Model model)
     {
-        orderManagementService.createOrder(orderPOJO);
+        OrderPOJO createdOrder =orderManagementService.createOrder(orderPOJO);
+        //model.addAttribute(String attributeName, Object attributeValue);
+        model.addAttribute("order", createdOrder);   // put it in the Model so the view can access it
 
-        return "redirect:/orders";
+//        return "redirect:/orders";
+          return "orderConfirmation";
     }
 
 

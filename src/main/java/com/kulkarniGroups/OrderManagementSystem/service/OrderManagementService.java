@@ -1,15 +1,19 @@
 package com.kulkarniGroups.OrderManagementSystem.service;
 
+import com.kulkarniGroups.OrderManagementSystem.POJO.InventoryPOJO;
 import com.kulkarniGroups.OrderManagementSystem.POJO.OrderPOJO;
 import com.kulkarniGroups.OrderManagementSystem.entity.OrderEntity;
 import com.kulkarniGroups.OrderManagementSystem.exceptions.OrderIdNotFoundException;
 import com.kulkarniGroups.OrderManagementSystem.exceptions.OrderNameNotFoundException;
+import com.kulkarniGroups.OrderManagementSystem.repository.InventoryRepository;
 import com.kulkarniGroups.OrderManagementSystem.repository.OrderRepository;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +40,8 @@ public class OrderManagementService
 
     @Autowired
     private OrderRepository orderRepository;
+    @Autowired
+    private InventoryRepository inventoryRepository;
     //Service layer talks to repository layer.
 
 //    @Transactional
@@ -56,16 +62,47 @@ public class OrderManagementService
 
     /**
      * Create Order
+     * Why does the Service also receive OrderPOJO?
+     * The controller has the data.
+     * The service needs that same data to perform business logic.
+     * So the controller passes it:
+     * orderManagementService.createOrder(orderPOJO);
      */
+//    @Transactional
+//    public void createOrder(OrderPOJO orderPOJO) {
+//
+//        OrderEntity orderEntity = convertToEntity(orderPOJO);
+//
+//        OrderEntity savedOrder =
+//                orderRepository.save(orderEntity);
+//
+//        convertToPOJO(savedOrder);
+//    }
+
     @Transactional
-    public void createOrder(OrderPOJO orderPOJO) {
+    public OrderPOJO createOrder(OrderPOJO orderPOJO) {
+        if (TransactionSynchronizationManager.isActualTransactionActive()) {
+            System.out.println("We're inside a real transaction right now");
+        }
 
+
+        //The value never used error on this method went away when OrderPOJO createdOrder =orderManagementService.createOrder(orderPOJO);
+        // added at the get end point
         OrderEntity orderEntity = convertToEntity(orderPOJO);
+        OrderEntity savedOrder = orderRepository.save(orderEntity);
 
-        OrderEntity savedOrder =
-                orderRepository.save(orderEntity);
+        Integer currentQty = inventoryRepository.getInventoryQty(orderPOJO.getOrderName());
 
-        convertToPOJO(savedOrder);
+        if (currentQty == null || currentQty < orderPOJO.getOrderQty()) {
+            throw new RuntimeException("Insufficient inventory for " + orderPOJO.getOrderName());
+        }
+
+        inventoryRepository.updateInventoryQty(
+                orderPOJO.getOrderName(),
+                currentQty - orderPOJO.getOrderQty()
+        );
+
+        return convertToPOJO(savedOrder);
     }
 
     /**
@@ -114,6 +151,13 @@ public class OrderManagementService
 //            return pojoList;
 //        }
 
+
+    /*
+     * Find the inventoryQty
+     */
+
+//    @Transactional(readOnly = true)
+//    public InventoryPOJO getInventoryCount(int invento)
     /**
      * Find Order By Id
      */
@@ -212,7 +256,7 @@ public class OrderManagementService
 //        So result can be:
 //        Case	Result
 //        Found	One OrderEntity
-//        Not found Nothing
+//        Not found : nothing
 //         */
 //        /*
 //        Optional is used in return types to explicitly indicate that a value may be absent, avoiding null-related issues.
