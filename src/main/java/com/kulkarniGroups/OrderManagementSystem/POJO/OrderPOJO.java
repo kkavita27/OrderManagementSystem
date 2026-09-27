@@ -1,6 +1,7 @@
 package com.kulkarniGroups.OrderManagementSystem.POJO;
 
 import com.kulkarniGroups.OrderManagementSystem.entity.OrderEntity;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -15,6 +16,7 @@ import java.util.List;
 
     private String orderName;
 
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private LocalDate orderDate;
 
     private Double orderPrice;

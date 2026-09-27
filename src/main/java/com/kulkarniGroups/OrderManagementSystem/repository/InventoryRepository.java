@@ -4,6 +4,7 @@ import com.kulkarniGroups.OrderManagementSystem.entity.InventoryEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -33,5 +34,10 @@ public interface InventoryRepository extends JpaRepository<InventoryEntity,Long>
        SET i.inventoryQty = :qty
        WHERE i.inventoryProductName = :productName
        """)
-    void updateInventoryQty(String productName, Integer qty);
-}
+//    void updateInventoryQty(String productName, Integer qty);
+    int updateInventoryQty(@Param("productName") String productName, @Param("qty") Integer qty);
+    /*
+    @Param explicitly binds a Java method parameter name to the named parameter (:productName, :qty)
+    used inside your @Query string. It's the glue between "this JVM argument" and "this placeholder in the JPQL/SQL text."
+     */
+    }

@@ -97,10 +97,11 @@ public class OrderManagementService
             throw new RuntimeException("Insufficient inventory for " + orderPOJO.getOrderName());
         }
 
-        inventoryRepository.updateInventoryQty(
+        int rowsUpdated = inventoryRepository.updateInventoryQty(
                 orderPOJO.getOrderName(),
                 currentQty - orderPOJO.getOrderQty()
         );
+        System.out.println("Rows updated: " + rowsUpdated);
 
         return convertToPOJO(savedOrder);
     }
